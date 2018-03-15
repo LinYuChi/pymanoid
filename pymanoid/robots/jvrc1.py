@@ -38,6 +38,7 @@ class JVRC1(Humanoid):
         'openrave_models/master/JVRC-1/JVRC-1.dae'
 
     sole_shape = (0.11, 0.05)  # (half-length [m], half-width [m]) of foot sole
+    palm_shape = (0.03, 0.04)
     leg_length = 0.85         # [m] (for a stretched leg)
     mass = 62.                # [kg]
 
@@ -165,13 +166,15 @@ class JVRC1(Humanoid):
         super(JVRC1, self).__init__(path, root_body)
         self.ik.set_active_dofs(self.whole_body)
         self.left_foot = Manipulator(
-            self.rave.GetManipulator("left_foot_base"), shape=self.sole_shape,
+            self.rave.GetManipulator("left_foot_base"), shape=self.sole_shape, 
             friction=0.8)
         self.left_hand = Manipulator(
-            self.rave.GetManipulator("left_hand_palm"), friction=0.8)
+            self.rave.GetManipulator("left_hand_palm"), shape=self.palm_shape, 
+            friction=0.8)
         self.mass = sum([link.GetMass() for link in self.rave.GetLinks()])
         self.right_foot = Manipulator(
-            self.rave.GetManipulator("right_foot_base"), shape=self.sole_shape,
+            self.rave.GetManipulator("right_foot_base"), shape=self.sole_shape, 
             friction=0.8)
         self.right_hand = Manipulator(
-            self.rave.GetManipulator("right_hand_palm"), friction=0.8)
+            self.rave.GetManipulator("right_hand_palm"), shape=self.palm_shape, 
+            friction=0.8)

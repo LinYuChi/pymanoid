@@ -20,5 +20,6 @@
 
 from .hrp4 import HRP4
 from .jvrc1 import JVRC1
+from .escher import ESCHER
 
-__all__ = ['HRP4', 'JVRC1']
+__all__ = ['HRP4', 'JVRC1', 'ESCHER']

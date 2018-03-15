@@ -31,6 +31,7 @@ from .sim import get_openrave_env, gravity
 from .transformations import crossmat, quat_from_rpy, rpy_from_quat
 from .transformations import rotation_matrix_from_rpy
 
+import openravepy
 
 class Robot(object):
 
@@ -52,13 +53,23 @@ class Robot(object):
     </environment>
     """
 
-    def __init__(self, path=None, xml=None):
+    def __init__(self, path=None, xml=None, use_urdf=False):
         assert path is not None or xml is not None
-        name = basename(splitext(path)[0])
-        if xml is None:
-            xml = Robot.__default_xml % (path, name)
+        
         env = get_openrave_env()
-        env.LoadData(xml)
+
+        if use_urdf:
+            urdf_path = path[0]
+            srdf_path = path[1]
+            module = openravepy.RaveCreateModule(env, 'urdf')
+            name = module.SendCommand('load {} {}'.format(urdf_path, srdf_path))
+        else:
+            name = basename(splitext(path)[0])
+            if xml is None:
+                xml = Robot.__default_xml % (path, name)
+            
+            env.LoadData(xml)
+        
         rave = env.GetRobot(name)
         nb_dofs = rave.GetDOF()
         q_min, q_max = rave.GetDOFLimits()
@@ -571,7 +582,7 @@ class Humanoid(Robot):
     </environment>
     """
 
-    def __init__(self, path, root_body):
+    def __init__(self, path, root_body, use_urdf=False):
         """
         Create a new humanoid robot model.
 
@@ -582,11 +593,19 @@ class Humanoid(Robot):
         root_body : string
             Name of the root body in the kinematic chain.
         """
-        if not isfile(path):
-            raise Exception("Model file '%s' not found" % path)
-        name = basename(splitext(path)[0])
-        xml = Humanoid.__free_flyer_xml % (path, name, root_body)
-        super(Humanoid, self).__init__(path, xml=xml)
+
+        if use_urdf:
+            xml = None
+        else:
+            if not isfile(path):
+                raise Exception("Model file '%s' not found" % path)
+            name = basename(splitext(path)[0])
+            
+            xml = Humanoid.__free_flyer_xml % (path, name, root_body)
+            
+
+        super(Humanoid, self).__init__(path, xml=xml, use_urdf=use_urdf)
+        
         self.has_free_flyer = True
         self.__cam = None
         self.__com = None
