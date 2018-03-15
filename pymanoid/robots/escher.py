@@ -100,6 +100,8 @@ class ESCHER(Humanoid):
     ROT_P = pitch_revolute_joint
     ROT_Y = yaw_revolute_joint
 
+    WAIST_Y = waist_yaw
+
     
 
     # Joints
@@ -177,7 +179,7 @@ class ESCHER(Humanoid):
         ``HRP4R.dae`` (md5sum: 38c30928b7ae62daa0fc67ed0488b0a1) due to
         copyright.
         """
-        super(ESCHER, self).__init__(path, root_body)
+        super(ESCHER, self).__init__(path, root_body, use_urdf=True)
         self.ik.set_active_dofs(self.whole_body)
         self.mass = sum([link.GetMass() for link in self.rave.GetLinks()])
         

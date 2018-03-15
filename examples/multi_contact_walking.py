@@ -43,7 +43,7 @@ from pymanoid.gui import draw_line, draw_point, draw_points
 from pymanoid.interp import interpolate_pose_linear, quat_slerp
 from pymanoid.misc import normalize
 from pymanoid.mpc import LinearPredictiveControl
-from pymanoid.robots import JVRC1
+from pymanoid.robots import JVRC1, ESCHER
 from pymanoid.sim import gravity
 from pymanoid.tasks import ContactTask, DOFTask, PoseTask, MinCAMTask
 from pymanoid.transformations import rotation_matrix_from_quat
@@ -849,7 +849,8 @@ class PointMassWrenchDrawer(PointMassWrenchDrawer):
 if __name__ == "__main__":
     seed(42)
     sim = pymanoid.Simulation(dt=0.03)
-    robot = JVRC1(download_if_needed=True)
+    # robot = JVRC1(download_if_needed=True)
+    robot = ESCHER()
     sim.set_viewer()
     robot.set_transparency(0.3)
 
@@ -882,9 +883,9 @@ if __name__ == "__main__":
     robot.ik.tasks['COM'].update_target(com_target)
     robot.ik.solve(max_it=42)
 
-    robot.ik.add(DOFTask(robot, robot.WAIST_P, 0.2, weight=1e-3))
+    # robot.ik.add(DOFTask(robot, robot.WAIST_P, 0.2, weight=1e-3))
     robot.ik.add(DOFTask(robot, robot.WAIST_Y, 0., weight=1e-3))
-    robot.ik.add(DOFTask(robot, robot.WAIST_R, 0., weight=1e-3))
+    # robot.ik.add(DOFTask(robot, robot.WAIST_R, 0., weight=1e-3))
     robot.ik.add(DOFTask(robot, robot.ROT_P, 0., weight=1e-3))
     robot.ik.add(DOFTask(robot, robot.R_SHOULDER_R, -0.5, weight=1e-3))
     robot.ik.add(DOFTask(robot, robot.L_SHOULDER_R, 0.5, weight=1e-3))
