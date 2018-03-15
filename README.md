@@ -15,41 +15,40 @@ Python library for humanoid robotics based on
 
 ## Use cases
 
-<img src="doc/source/images/logo.png" width="350" align="right" />
+<img src="doc/src/images/logo.png" width="350" align="right" />
 
-- [Dynamic walking over rough terrains](https://github.com/stephane-caron/dynamic-walking)
-  based on nonlinear model predictive control of the floating-base inverted
-  pendulum model
-- [Multi-contact walking pattern generation](https://github.com/stephane-caron/3d-walking-lmpc)
-  based on linear model predictive control of 3D CoM accelerations
+- [3D bipedal walking over uneven terrains](https://github.com/stephane-caron/capture-walking) 
+  based on a capturability analysis of the 3D inverted pendulum model
+- [Nonlinear model predictive control](https://github.com/stephane-caron/fip-walking)
+  using a direct transcription of centroidal dynamics
+- [Linearized model predictive control](https://github.com/stephane-caron/3d-walking-lmpc)
+  using a conservative linearization of CoM acceleration cones
 - [Multi-contact ZMP support areas](https://github.com/stephane-caron/multi-contact-zmp)
   for locomotion in multi-contact scenarios (including hand contacts)
 - [Humanoid stair climbing](https://github.com/stephane-caron/stair-climbing)
-  demonstrated on a Kawada HRP-4 robot
+  demonstrated on the HRP-4 humanoid robot
 
 ## Getting started
 
 - [Installation instructions](#installation)
-- [Documentation](https://scaron.info/doc/pymanoid/)
+- Documentation: [html](https://scaron.info/doc/pymanoid/) or [pdf](https://scaron.info/doc/pymanoid/pymanoid.pdf)
 - [FAQ](https://github.com/stephane-caron/pymanoid/wiki/Frequently-Asked-Questions)
 - [Examples](/examples)
 
 ## Installation
 
-First, you will need to install
-[OpenRAVE](https://github.com/rdiankov/openrave). Here are some [instructions
-for Ubuntu
-14.04](https://scaron.info/teaching/installing-openrave-on-ubuntu-14.04.html)
-and [Ubuntu
-16.04](https://scaron.info/teaching/installing-openrave-on-ubuntu-16.04.html).
+The following instructions were verified on Ubuntu 14.04:
 
-Next, install all Python dependencies with:
+- Install OpenRAVE: here are [instructions for Ubuntu 14.04](https://scaron.info/teaching/installing-openrave-on-ubuntu-14.04.html) as well as [for Ubuntu 16.04](https://scaron.info/teaching/installing-openrave-on-ubuntu-16.04.html)
+- Install Python dependencies: 
 ```
 sudo apt-get install cython libglpk-dev python python-dev python-pip python-scipy python-simplejson
-sudo pip install quadprog pycddlib pyclipper
-sudo CVXOPT_BUILD_GLPK=1 pip install cvxopt
 ```
-Finally, clone the repository, and run the setup script:
+- Install the LP solver: ``CVXOPT_BUILD_GLPK=1 pip install cvxopt --user``
+- Install the QP solver: ``pip install quadprog --user``
+- For polyhedral computations (optional): ``pip install pycddlib --user``
+
+Finally, clone this repository and run the setup script:
 ```
 git clone https://github.com/stephane-caron/pymanoid.git && cd pymanoid
 python setup.py build
@@ -60,4 +59,4 @@ python setup.py install --user
 
 For nonlinear numeric optimization, you will need to [install
 CasADi](https://github.com/casadi/casadi/wiki/InstallationLinux), preferably
-from source to install the MA27 linear solver as well.
+from source with the MA27 linear solver.

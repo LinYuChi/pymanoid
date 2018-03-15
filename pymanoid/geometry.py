@@ -20,15 +20,26 @@
 
 from __future__ import division
 
-import cdd
-import cvxopt
-
 from numpy import array, dot, hstack, ones, vstack, zeros
 from scipy.spatial import ConvexHull
 
-from .misc import norm
+from .misc import norm, warn
 from .optim import solve_lp
 from .thirdparty import bretl
+
+
+try:
+    import cdd
+except ImportError:
+    warn("Could not import cdd, polyhedral geometry functions will fail")
+    cdd = None
+
+
+try:
+    import cvxopt
+except ImportError:
+    warn("Could not import CVXOPT, Bretl projection method will fail")
+    cvxopt = None
 
 
 PREC_TOL = 1e-10  # tolerance to numerical imprecisions
@@ -297,8 +308,9 @@ def intersect_line_polygon(line, vertices, apply_hull):
 
     Notes
     -----
-    This code is adapted from <http://stackoverflow.com/a/20679579>. On the same
-    setting with `apply_hull=False`, it %timeits to 6 us.
+    This code is adapted from
+    <https://stackoverflow.com/questions/20677795/how-do-i-compute-the-intersection-point-of-two-lines-in-python/20679579#20679579>.
+    On the same setting with `apply_hull=False`, it %timeits to 6 us.
     """
     def line_coordinates(p1, p2):
         A = (p1[1] - p2[1])
@@ -407,10 +419,8 @@ def project_polyhedron(proj, ineq, eq=None, canonicalize=True):
 
     .. math::
 
-        \\begin{eqnarray}
-        A x & \\leq & b \\\\
-        C x & = & d
-        \\end{eqnarray}
+        A x & \\leq b \\\\
+        C x & = d
 
     Parameters
     ----------
@@ -487,10 +497,8 @@ def project_polytope(proj, ineq, eq=None, method='cdd'):
 
     .. math::
 
-        \\begin{eqnarray}
-        A x & \\leq & b \\\\
-        C x & = & d
-        \\end{eqnarray}
+        A x & \\leq b \\\\
+        C x & = d
 
     Parameters
     ----------
@@ -530,10 +538,8 @@ def project_polytope_bretl(proj, ineq, eq, max_radius=42.):
 
     .. math::
 
-        \\begin{eqnarray}
-        A x & \\leq & b \\\\
-        C x & = & d
-        \\end{eqnarray}
+        A x & \\leq b \\\\
+        C x & = d
 
     Parameters
     ----------

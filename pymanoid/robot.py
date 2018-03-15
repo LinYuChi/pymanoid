@@ -108,8 +108,7 @@ class Robot(object):
         Parameters
         ----------
         color : tuple or string
-            RGB tuple, or color code in `matplotlib convention
-            <http://matplotlib.org/api/colors_api.html>`_.
+            RGB tuple, or color code in matplotlib convention.
         """
         if type(color) is str:
             color = matplotlib_to_rgb(color)
@@ -432,11 +431,9 @@ class Robot(object):
 
         .. math::
 
-            \\begin{eqnarray}
-                t_m & = & M(q) \\ddot{q} \\\\
-                t_c & = & \\dot{q}^T C(q) \\dot{q} \\\\
-                t_g & = & g(q)
-            \\end{eqnarray}
+            t_m & = M(q) \\ddot{q} \\\\
+            t_c & = \\dot{q}^T C(q) \\dot{q} \\\\
+            t_g & = g(q)
 
         where the equations of motion are written:
 

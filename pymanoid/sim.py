@@ -33,9 +33,10 @@ from time import sleep, time
 from .misc import AvgStdEstimator, matplotlib_to_rgb, warn
 
 
+e_z = array([0., 0., 1.])
 env = None  # global OpenRAVE environment
 gravity_const = 9.80665  # ISO 80000-3
-gravity = array([0, 0, -gravity_const])  # gravity vector in the world frame
+gravity = -gravity_const * e_z
 
 
 def get_openrave_env():
@@ -54,7 +55,7 @@ class Process(object):
 
     def on_tick(self, sim):
         """
-        Function called by the simulation at each clock tick.
+        Main function called by the simulation at each control cycle.
 
         Parameters
         ----------
@@ -64,11 +65,15 @@ class Process(object):
         raise NotImplementedError("should be implemented by child class")
 
     def pause(self):
-        """Stop calling the process at new clock ticks."""
+        """
+        Stop calling the process at new clock ticks.
+        """
         self.is_paused = True
 
     def resume(self):
-        """Resume calling the process at new clock ticks."""
+        """
+        Resume calling the process at new clock ticks.
+        """
         self.is_paused = False
 
 
